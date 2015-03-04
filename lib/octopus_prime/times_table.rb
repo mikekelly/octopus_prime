@@ -1,8 +1,6 @@
-require "terminal-table"
-
 module OctopusPrime
   class TimesTable
-    def initialize(primes:)
+    def initialize(numbers:)
     end
 
     def to_a
