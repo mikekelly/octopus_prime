@@ -13,6 +13,7 @@ module OctopusPrime
           discovered_primes << smallest_remaining_prime
           search_range.delete_if { |number| number % smallest_remaining_prime == 0 }
           break if discovered_primes.count == count
+          raise LimitReached if search_range.empty?
         end
       end
     end
@@ -21,4 +22,6 @@ module OctopusPrime
 
     attr_reader :max_value
   end
+
+  LimitReached = Class.new(StandardError)
 end
