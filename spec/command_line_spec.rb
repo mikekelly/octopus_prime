@@ -22,4 +22,12 @@ EOS
       expect(`bin/prime_table --count 10`).to eq(ascii_table)
     end
   end
+
+  context "with a max_value of 10 and a count of 20" do
+    it "prints out an error message explaining the max_value is too small" do
+      expect(`bin/prime_table --max_value 10 --count 20`.chomp).to eq(
+        "You must specify a larger --max_value option than 10 to search for 20 primes"
+      )
+    end
+  end
 end

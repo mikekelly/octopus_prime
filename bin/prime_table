@@ -2,15 +2,25 @@
 
 require "bundler/setup"
 require "terminal-table"
+require "slop"
 require_relative "../lib/octopus_prime"
 
-count = 10
-max_value = 1000
+opts = Slop.parse do
+  on 'count=', 'number of primes to find (default: 10)', as: Integer
+  on 'max_value=', 'specify the maximum number to search for primes up to (default: 1000)', as: Integer
+end
 
-resolver = OctopusPrime::Resolver.new(max_value: max_value)
-primes = resolver.call(count: count)
-times_table = OctopusPrime::TimesTable.new(numbers: primes)
+count = opts[:count] || 10
+max_value = opts[:max_value] || 1000
 
-headings = times_table.to_a.first
-rows = times_table.to_a[1..-1]
-puts Terminal::Table.new headings: headings, rows: rows
+begin
+  resolver = OctopusPrime::Resolver.new(max_value: max_value)
+  primes = resolver.call(count: count)
+  times_table = OctopusPrime::TimesTable.new(numbers: primes)
+
+  headings = times_table.to_a.first
+  rows = times_table.to_a[1..-1]
+  puts Terminal::Table.new headings: headings, rows: rows
+rescue OctopusPrime::LimitReached
+  puts "You must specify a larger --max_value option than #{max_value} to search for #{count} primes"
+end
