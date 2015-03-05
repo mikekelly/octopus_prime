@@ -4,10 +4,13 @@ require "bundler/setup"
 require "terminal-table"
 require_relative "../lib/octopus_prime"
 
-primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
-table = OctopusPrime::TimesTable.new(numbers: primes)
+count = 10
+max_value = 1000
 
-headings = table.to_a.first
-rows = table.to_a[1..-1]
+resolver = OctopusPrime::Resolver.new(max_value: max_value)
+primes = resolver.call(count: count)
+times_table = OctopusPrime::TimesTable.new(numbers: primes)
 
+headings = times_table.to_a.first
+rows = times_table.to_a[1..-1]
 puts Terminal::Table.new headings: headings, rows: rows
